@@ -13,10 +13,10 @@ d
 
 缩进:
 ctrl + v 选中
-&gt（shift + .) 
+> （即shift + .) 
 
 反缩进:
 ctrl + v 选中
-&lt (shift + ,)
+< (即shift + ,)
 
 
