@@ -1,43 +1,36 @@
 #!/bin/env python
 #-*- coding=utf-8 -*-
-"""Just for python study."""
-import sys
-import thread
-import socket
+# Author:  John Hu
+# Email:   huzichunjohn@126.com
+# Date:    2014-2-27
+# Version: 1.0
+
 import time
-import logging
+import thread
 
-def get_ip(name):
-    """Get ip from domain name."""
-    logging.info('[%s]: %s', name, socket.gethostbyname(name))
+def worker(i, interval):
+    while True:
+        current_time = get_current_time()
+        print "[ " + current_time + " ]" + " Thread " + str(i) + " " + str(interval)
+        time.sleep(interval)
 
-def get_domain_infos(filename):
-    """Get domain infos."""
-    domains = []
-    try:
-        f = open(filename, 'r')
-        lines = f.readlines()
-        for line in lines:
-            domains.append(line.strip())
-        return domains
-    except IOError:
-        logging.debug("Open file failed.")
-        sys.exit(1)
-    finally:
-        f.close()
+def main(times):
+    for i in range(times):
+        print i
+        thread.start_new_thread(worker, (i, (i*2 + 1)))
 
-def main():
-    """Start to run."""
-    hostname = get_domain_infos('name.txt')
-    logging.debug(hostname)
-    length = len(hostname)
+def get_current_time():
+    """Get current time."""
+    return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
 
-    for i in range(length):
-        thread.start_new_thread(get_ip, (hostname[i],))
+def get_millisecond(time):
+    item = time.split(":")
+    sum = (int(item[0])*3600 + int(item[1])*60 + int(item[2]))*1000 + int(item[3])
+    return sum
 
-if __name__ == "__main__":
-    logging.basicConfig(filename='domain.log', \
-                        format='[%(asctime)s] %(message)s', \
-                        datefmt='%Y-%m-%d %I:%M:%S %p', level=logging.DEBUG)
-    main()
-    time.sleep(5)
+if __name__ == '__main__':
+    print "Start ......"
+    main(5)
+    time.sleep(25)
+    print "Stop ......"
+
