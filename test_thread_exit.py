@@ -7,15 +7,19 @@
 
 import threading
 
+def hello(name):
+    print "hello " + name
 
-
-
-
-
-
+def set_interval(sec, func, *args, **kw):
+    def wrapper():
+        set_interval(sec, func, *args, **kw)
+        func(*args, **kw)
+    t = threading.Timer(sec, wrapper)
+    t.start()
+    return t
 
 if __name__ == "__main__":
-
+    set_interval(3,hello,"world.")
 
 
 
