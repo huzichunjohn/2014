@@ -30,7 +30,7 @@ def main():
 
 
 if __name__ == "__main__":
-    logging.basicConfig(filename='example.log', format='[%(asctime)s] (%(threadName)10s) %(message)s', datefmt='%Y-%m-%d %I:%M:%S %p', level=logging.DEBUG)
+    logging.basicConfig(filename='example.log', format='[%(asctime)s] (%(threadName)10s) %(message)s', datefmt='%Y-%m-%d %I:%M:%S.%f %p', level=logging.DEBUG)
     main()
 
 

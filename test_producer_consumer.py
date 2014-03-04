@@ -15,14 +15,14 @@ import sys
 queue = Queue.Queue()
 
 class Producer(threading.Thread):
-    def __init__(self, thread_name):
+    def __init__(self, thread_name, queue):
         threading.Thread.__init__(self, name=thread_name)
         self._stop = False
+        self.queue = queue
 
     def run(self):
-        global queue
         while not self._stop:
-            queue.put(self.getName())
+            self.queue.put(self.getName())
             time.sleep(random.randint(1, 10))
             logging.debug(self.getName() + ' put ' + self.getName() + ' to the queue.')
         logging.debug(self.getName() + ' is ready to exit.')
@@ -32,14 +32,14 @@ class Producer(threading.Thread):
         logging.debug('[producer exit]' + str(self.isAlive()))
 
 class Consumer(threading.Thread):
-    def __init__(self, thread_name):
+    def __init__(self, thread_name, queue):
         threading.Thread.__init__(self, name=thread_name)
         self._stop = False
+        self.queue = queue
 
     def run(self):
-        global queue
-        while not queue.empty() and not self._stop:
-            logging.debug(self.getName() + ' get ' +  queue.get() + ' from the queue.')
+        while not self.queue.empty() and not self._stop:
+            logging.debug(self.getName() + ' get ' +  self.queue.get() + ' from the queue.')
             time.sleep(random.randint(1,10))
         logging.debug(self.getName() + ' is ready to exit.')
 
@@ -52,12 +52,12 @@ def main():
         producers = []
         consumers = []
         for i in range(10):
-            p = Producer('Producer' + str(i))
+            p = Producer('Producer' + str(i), queue)
             p.setDaemon(True)
             producers.append(p)
 
         for i in range(3):
-            c = Consumer('Consumer' + str(i))
+            c = Consumer('Consumer' + str(i), queue)
             c.setDaemon(True)
             consumers.append(c)
 
@@ -86,10 +86,12 @@ def main():
 
         for producer in producers:
             producer.join()
+        print "Producers finished."
 
         for consumer in consumers:
             consumer.join()
-
+        print "Consumers finished."
+        
         for producer in producers:
             logging.debug(producer.getName() + ": " + str(producer.isAlive()))
 
