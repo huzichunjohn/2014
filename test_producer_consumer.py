@@ -53,12 +53,12 @@ def main():
         consumers = []
         for i in range(10):
             p = Producer('Producer' + str(i), queue)
-            p.setDaemon(True)
+            #p.setDaemon(True)
             producers.append(p)
 
         for i in range(3):
             c = Consumer('Consumer' + str(i), queue)
-            c.setDaemon(True)
+            #c.setDaemon(True)
             consumers.append(c)
 
         for producer in producers:

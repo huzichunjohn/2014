@@ -8,7 +8,7 @@
 import threading
 
 def hello(name):
-    print "hello " + name
+    print "hello", name
 
 def set_interval(sec, func, *args, **kw):
     def wrapper():
@@ -19,7 +19,7 @@ def set_interval(sec, func, *args, **kw):
     return t
 
 if __name__ == "__main__":
-    set_interval(3,hello,"world.")
+    set_interval(3, hello, "world.")
 
 
 
