@@ -19,7 +19,7 @@ class scanner(threading.Thread):
     def run(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
-            s.connect((self.host, self.theadnum))
+            s.connect((self.host, self.threadnum))
             print "%d: successfully connected" % self.threadnum
             s.close()
         except:
@@ -27,25 +27,28 @@ class scanner(threading.Thread):
 
         scanner.lck.acquire()
         scanner.tlist.remove(self)
-        print "%d: now active == %s" % self.threadnum, scanner.tlist
-        if len(scanner.tlist) == scanner.maxthread - 1:
+        print "%d: now active == %s" % (self.threadnum, scanner.tlist)
+        if len(scanner.tlist) == scanner.maxthreads - 1:
             scanner.evnt.set()
             scanner.evnt.clear()
         scanner.lck.release()
 
-        def newthread(pn, hst):
-            scanner.lck.acquire()
-            sc = scanner(pn, hst)
-            scanner.lck.release()
-            sc.start()
-            print "%d: starting check" % pn
-            print "%d: now active == %s" % pn, scanner.tlist
-        newthread = staticmethod(newthread)
+    #@staticmethod
+    def newthread(pn, hst):
+        scanner.lck.acquire()
+        sc = scanner(pn, hst)
+        scanner.tlist.append(sc)
+        scanner.lck.release()
+        sc.start()
+        print "%d: starting check" % pn
+        print "%d: now active == %s" % (pn, scanner.tlist)
+
+    newthread = staticmethod(newthread)
 
 
 def main():
     host = sys.argv[1]
-    for i in range(1, 100):
+    for i in range(1, 1000):
         scanner.lck.acquire()
         print "%d: attempting check" % i
         if len(scanner.tlist) >= scanner.maxthreads:

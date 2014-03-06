@@ -1,0 +1,13 @@
+f5:
+- credentials: {password: huzichun!@#, username: huzichun}
+  dc: lx
+  ip: 192.168.0.1
+  role: master
+- credentials: {password: huzichun!@#, username: huzichun}
+  dc: sjhl
+  ip: 192.168.0.2
+  role: slave
+- credentials: {password: huzichun!@#, username: huzichun}
+  dc: yd
+  ip: 192.168.0.3
+  role: master
